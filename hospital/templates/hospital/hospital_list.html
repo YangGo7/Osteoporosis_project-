@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block explain_contents %}
+<div class="container mt-4">
+  <h2>📍 지역별 병원 검색</h2>
+
+  <form method="get" class="form-inline mb-3">
+    <select name="city" id="city-select" class="form-control mr-2">
+      <option value="">시/도 선택</option>
+      {% for c in cities %}
+        <option value="{{ c }}" {% if c == selected_city %}selected{% endif %}>{{ c }}</option>
+      {% endfor %}
+    </select>
+
+    <select name="district" id="district-select" class="form-control mr-2">
+      <option value="">시/군/구 선택</option>
+      {% if selected_district %}
+        <option selected>{{ selected_district }}</option>
+      {% endif %}
+    </select>
+
+    <button type="submit" class="btn btn-primary">검색</button>
+  </form>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>병원명</th>
+        <th>주소</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for h in hospitals %}
+        <tr>
+          <td>{{ h.name }}</td>
+          <td>{{ h.address }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="2">검색 결과가 없습니다.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $('#city-select').change(function () {
+    const city = $(this).val();
+    $.get("{% url 'hospital:get_districts' %}", { city: city }, function (data) {
+      const districtSelect = $('#district-select');
+      districtSelect.empty().append('<option value="">시/군/구 선택</option>');
+      data.forEach(function (d) {
+        districtSelect.append('<option value="' + d + '">' + d + '</option>');
+      });
+    });
+  });
+</script>
+{% endblock explain_contents %}

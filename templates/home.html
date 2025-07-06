@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+{% block stylesheet %}{% endblock  %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% block explain_contents %}
+<div class = "container">
+    <p align = " center">
+        <h3> 의료 인공지능 </h3>
+    <br>
+    <img src = "{% static 'img/ai.jpg' %}" alt="이미지" width="80%">
+    </p>
+<div>
+{% endblock explain_contents %}

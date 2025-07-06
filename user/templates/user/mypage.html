@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block explain_contents %}
+<div align="center" class="mypage-container">
+<h2>마이페이지</h2>
+
+<table class="table-style">
+    <tr><th>항목</th><th>정보</th></tr>
+    <tr><td>이름</td><td>{{ profile.user.username }}</td></tr>
+    <tr><td>이메일</td><td>{{ profile.user.email }}</td></tr>
+    <tr><td>나이</td><td>{{ profile.age }}</td></tr>
+    <tr><td>성별</td><td>{{ profile.gender }}</td></tr>
+    <tr><td>height</td><td>{{ profile.height }}</td></tr>
+    <tr><td>weight</td><td>{{ profile.weight }}</td></tr>
+    <tr><td>골절 여부</td><td>{{ profile.fracture }}</td></tr>
+    <tr><td>흡연 여부</td><td>{{ profile.smoking }}</td></tr>
+    <tr><td>칼시트리올</td><td>{{ profile.calcitriol }}</td></tr>
+    <tr><td>OP 여부</td><td>{{ profile.op }}</td></tr>
+    <tr><td>CKD 여부</td><td>{{ profile.ckd }}</td></tr>
+    <tr><td>COPD 여부</td><td>{{ profile.copd }}</td></tr>
+    <tr><td>당뇨 여부</td><td>{{ profile.dm }}</td></tr>
+    <tr><td>음주 여부</td><td>{{ profile.drinking }}</td></tr>
+</table>
+
+<div style="margin-top: 20px;">
+    <a class="btn btn-primary" href="{% url 'user:mypage_edit' %}">정보 수정</a>
+    <a class="btn btn-danger" href="{% url 'osteoporosis:result_list' %}">결과 확인</a>
+</div>
+</div>
+{% endblock %}

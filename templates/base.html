@@ -1,0 +1,126 @@
+    <!DOCTYPE html>
+    {% load i18n static %}
+    <html lang="ko">
+    <head>
+    <title>{%block title%} 빅데이터반 {% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    {% block header %}{% endblock header %}
+    {% block stylesheet %}{% endblock %}
+    <style>
+        /* 팝업 모달 스타일 */
+        .modal {
+            display: none; /* 기본적으로 숨김 */
+            position: fixed;
+            z-index: 1050;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 100%;
+            height: 100%;
+        }
+        .modal-content {
+            width: 250px; /* 작은 사각형 팝업 */
+            height: 300px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .modal img {
+            width: 100%;
+            max-height: 150px;
+            border-radius: 5px;
+        }
+        .modal a {
+            display: block;
+            margin: 10px 0;
+            padding: 8px;
+            background-color: #ff4d4d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .modal a:hover {
+            background-color: #cc0000;
+        }
+        .close-btn {
+            display: block;
+            cursor: pointer;
+            color: red;
+            font-weight: bold;
+            font-size: 14px;
+        }
+    </style>
+    </head>
+    <body>
+
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <!-- Brand/logo -->
+    <a class="navbar-brand" href="/">Home</a>
+    
+    <!-- Links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'user:login' %}">로그인</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'user:logout' %}">로그아웃</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'user:register' %}">등록</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'user:mypage' %}">mypage</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'board' %}">post</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'hospital:hospital' %}">hospital</a>
+        </li>
+
+    </ul>
+    </nav>
+
+    {% block explain_contents %}
+    {% endblock explain_contents %}
+    <center>
+    <center>
+    </body>
+    </html>
+
+    <!-- 팝업 광고 모달 -->
+    <div id="adModal" class="modal">
+        <div class="modal-content">
+            <h3> 광고 </h3>
+            <img src="https://dentisimplant.co.kr/img/main/main_img10.png" alt="광고 이미지">
+            <a href="https://www.dentis.co.kr/main/main.do" target="_blank">더 알아보기</a>
+            <span class="close-btn" onclick="closeModal()">닫기</span>
+        </div>
+    </div>
+
+    <script>
+        // 3초 후 자동으로 팝업 표시
+        window.onload = function () {
+            setTimeout(function () {
+                document.getElementById('adModal').style.display = 'block';
+            }, 3000);
+        };
+
+        // 팝업 닫기
+        function closeModal() {
+            document.getElementById('adModal').style.display = 'none';
+        }
+    </script>

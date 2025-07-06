@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock  %}
+{%  block explain_contents %}
+<div align="center">
+    <br>
+    <br>
+    <p>로그아웃 되었습니다. !</p>
+<a href="/">메인페이지로.</a><br><br>
+<!-- <a href="{% url 'login'%}">다시 로그인하려면 클릭.</a>-->
+<a href="/accounts/login">다시 로그인하려면 클릭.</a>
+</div>
+{% endblock %}

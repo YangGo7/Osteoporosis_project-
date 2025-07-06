@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block explain_contents %}
+
+<!-- 검색창 추가 -->
+<form method="GET" action="{% url 'board' %}" class="d-flex justify-content-end mb-3">
+    <input type="text" name="q" class="form-control me-2" style="max-width: 300px;" placeholder="검색어를 입력하세요" value="{{ query }}">
+    <button type="submit" class="btn btn-outline-secondary">검색</button>
+</form>
+
+<!-- 검색 결과 수 표시 추가 -->
+{% if query %}
+    <p class="text-muted">"<strong>{{ query }}</strong>" 에 대한 검색 결과: <strong>{{ posts|length }}</strong>건</p>
+{% endif %}
+
+<!-- QnA 게시판 상단 헤더 -->
+<div class="card p-4 mb-4 shadow-sm bg-light">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-0 fw-bold">📌 QnA 게시판</h2>
+        <a href="{% url 'create_post' %}" class="btn btn-success">+ 새 글 작성</a>
+    </div>
+</div>
+
+<!-- 검색 결과 없을 때 안내 추가 -->
+{% if query and posts|length == 0 %}
+    <p class="text-danger">검색 결과가 없습니다.</p>
+{% endif %}
+
+<!-- 게시글 목록 테이블 추가 -->
+<table class="table table-hover text-center align-middle">
+    <colgroup>
+        <col style="width: 50%">
+        <col style="width: 25%">
+        <col style="width: 25%">
+    </colgroup>
+    <thead class="table-dark">
+        <tr>
+            <th class="text-center">제목</th>
+            <th class="text-center">작성자</th>
+            <th class="text-center">작성일</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if posts %}
+            {% for post in posts %}
+            <tr>
+                {% if post.is_secret and not user.is_authenticated %}
+                    <td class="text-muted">🔒 비밀글</td>
+                {% else %}
+                    <td>
+                        <a href="{% url 'post_detail' post.id %}" class="fw-bold text-decoration-none">
+                            {{ post.title }}
+                        </a>
+                    </td>
+                {% endif %}
+                <td class="text-secondary">{{ post.author.username }}</td>
+                <td class="text-secondary" style="font-size: 0.9rem;">
+                    {{ post.created_at|date:"Y-m-d H:i" }}
+                </td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="3" class="text-center text-muted">등록된 게시글이 없습니다.</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+{% endblock explain_contents %}

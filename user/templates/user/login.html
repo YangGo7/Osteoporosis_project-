@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock  %}
+{% block explain_contents %}
+<div align="center">
+    {% if form.errors %}
+        <p>ID와 Password를 정확하게 입력하세요.</p>
+    {% endif %}
+    
+    {% if next %}
+        {% if user.is_authenticated %}
+            <p>권한이 없으니 계정 생성 후 시도하세요.</p>
+        {% else %}
+            <p>로그인이 필요한 서비스입니다.</p>
+        {% endif %}
+    {% endif %}
+    
+    <form method="post" action="{% url 'user:login' %}">
+
+    {% csrf_token %}
+
+    {{ form.as_p }}  <!-- 폼 전체를 출력 -->
+
+    <input type="submit" value="로그인" />
+</form>
+</div>
+{% endblock %}

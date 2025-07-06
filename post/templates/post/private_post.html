@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block explain_contents %}
+
+<div class="alert alert-warning text-center p-4">
+    <h2>🔒 이 게시글은 비밀글입니다.</h2>
+    <p>작성자 또는 답변 권한이 있는 사용자만 조회할 수 있습니다.</p>
+    <a href="{% url 'board' %}" class="btn btn-secondary mt-3">목록으로</a>
+</div>
+
+{% endblock explain_contents %}

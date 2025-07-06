@@ -1,0 +1,174 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+
+{% block explain_contents %}
+<div class="form-wrapper">
+  <h2>골절 위험 예측</h2>
+  <!-- 이나경 추가(1) -->
+  <div class="info-box">
+    <h4>골다공증, 왜 조기 예측이 중요할까요?</h4>
+    <p>
+      골다공증은 특별한 증상이 없이 조용히 진행되다가, 넘어지거나 가벼운 충격에도 <br>
+      뼈가 부러지면서 처음 발견되는 경우가 많기 때문입니다. 이러한 골절은 노인의 경우 <br>
+      움직임의 제한, 장기 입원, 사망 위험 증가로 이어질 수 있습니다.<br>
+      <br>
+      따라서 조기에 골다공증을 예측하고 예방 조치를 취하면, <br>
+      골절 위험을 낮추고, 삶의 질을 유지하며, 의료비 부담도 줄일 수 있습니다.<br> 
+      <br>
+      또한 조기 예측을 통해 식습관 개선, 운동, 비타민 D 보충, 약물치료 등 <br>  
+      적절한 관리를 빠르게 시작할 수 있습니다.<br>
+    </p>
+    <br>
+    <h4>관련 자료 보기</h4>
+    <ul>
+      <li><a href="https://www.kmedinfo.co.kr/news/articleView.html?idxno=51466" target="_blank">[2018 골다공증 진료지침] 제 1장 골다공증의 정의 및 역학</a></li>
+      <li><a href="https://jkna.org/journal/view.php?doi=10.17340/jkna.2017.4.27" target="_blank">[논문] Treatment and Diagnosis of Osteoporosis</a></li>
+    </ul>
+  </div>
+
+  <!-- 이나경 추가(2) -->
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">
+          {{ field.label }}
+          {% if field.name == 'op' %}
+          <span class="tooltip-icon" title="골다공증이란? 
+          뼛속에 구멍이 많이 생긴다는 뜻이며, 
+          골다공증은 뼈의 양이 줄어들어 뼈가 
+          얇아지고 약해져 잘 부러지는 질환입니다.">❓</span>
+  
+          {% elif field.name == 'ckd' %}
+          <span class="tooltip-icon" title="만성신장질환이란?
+          신장이 오랜 기간에 걸쳐 서서히 기능을 잃어가는 질환입니다.
+          노폐물을 제대로 걸러내지 못해 다양한 합병증을 유발할 수 있습니다.">❓</span>
+  
+          {% elif field.name == 'copd' %}
+          <span class="tooltip-icon" title="만성폐쇄질환이란?
+          폐로 공기가 들어가고 나오는 길이 좁아지는 질환입니다.
+          기침, 가래, 숨참 등의 증상이 있으며, 주로 흡연이 
+          주요 원인입니다.">❓</span>
+  
+          {% elif field.name == 'dm' %}
+          <span class="tooltip-icon" title="당뇨병이란? 
+          인슐린 분비 또는 작용의 문제로 인해 
+          혈당 조절이 잘 되지 않는 질환입니다.
+          혈당이 높아지면서 다양한 합병증이 
+          생길 수 있습니다.">❓</span>
+  
+  
+          {% elif field.name == 'fracture' %}
+          <span class="tooltip-icon" title="골절 병력을 물어보는 이유는? 
+          골다공증 환자의 경우, 작은 충격에도 
+          골절이 발생할 수 있으며 골절 병력은 
+          향후 골절 위험을 높이는 지표입니다.">❓</span>
+  
+          {% elif field.name == 'calcitriol' %}
+          <span class="tooltip-icon" title="비타민D 복용 여부를 물어보는 이유는?
+          칼슘과 인의 흡수를 돕고 뼈를 건강하게 유지하는 데 
+          중요한 역할을 합니다. 비타민 D가 부족하면 뼈가 
+          약해질 수 있기 때문에 예측 지표로 유의미합니다.">❓</span>
+  
+          {% endif %}
+        </label>
+  
+        <div class="form-field">
+          {% if field|slice:":10"|join:'' == 'radioinput' %}
+            <div class="radio-group">{{ field }}</div>
+          {% else %}
+            {{ field }}
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+    <button type="submit">결과 보기</button>
+     <!-- 오늘 날짜 표시 -->
+     <p style="text-align:center; font-size:14px; margin: 10px 0;">
+      오늘 날짜: <span id="today-date" style="font-weight:bold;"></span>
+  </p>
+  <!-- 서버에 보낼 hidden input -->
+  <input type="hidden" name="today_date" id="today_date">
+
+  <p class="note">※ 모든 항목은 필수 입력입니다.<br>
+  이 설문은 건강 상태를 참고로 확인하는 도구이며, 의사의 진단을 대체할 수 없습니다.</p>
+  </form>
+
+  {% if result %}
+    <div class="result-box">
+      <h3>예측 결과</h3>
+      <p><strong>{{ user.name }}</strong> 님의 10년 내 골절 관련 위험 예측 결과는 다음과 같습니다:</p>
+      <p>☞ 주요 골절 위험: <strong>{{ result.major_risk }}%</strong></p>
+      <p>☞ 고관절 골절 위험: <strong>{{ result.hip_risk }}%</strong></p>
+      <p>☞ 골다공증 위험도: <strong>{{ result.level }}</strong></p>
+    </div>
+    {% if exercises and foods %}
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <h4>
+                <img src="{% static 'img/exercise.png' %}" alt="운동 아이콘" width="24" height="24" style="margin-right: 8px;">
+                추천 운동 </h4>
+            <ul>
+                {% for exercise in exercises %}
+                    <li>{{ exercise }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h4>
+                <img src="{% static 'img/food.png' %}" alt="식단 아이콘" width="24" height="24" style="margin-right: 8px;">
+                추천 식단 </h4>
+                <img src="{% static foods.image %}" width="300" alt="식단 이미지" style="margin-bottom: 10px;">
+            <ul>
+                {% for item in foods.items %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+
+
+    <div class="button-box" style="text-align: right; margin-top: 10px; display: flex; justify-content: space-between;">
+      <button onclick="alert('결과가 저장되었습니다.')">💾 결과 저장하기</button>
+      <div class="download">
+        <a href="{% url 'osteoporosis:pdf_my' %}?name={{ user.name }}&major_risk={{ result.major_risk }}&hip_risk={{ result.hip_risk }}&osteoporosis_risk={{ result.osteoporosis_risk }}&risk_level={{ result.level }}" target="_blank">
+          결과 PDF 저장
+      </a>
+
+    </div>
+    </div>
+    <script>
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      const formatted = `${yyyy}-${mm}-${dd}`;  // 또는 `${yyyy}년 ${mm}월 ${dd}일`
+
+      document.getElementById('today-date').textContent = formatted;
+      document.getElementById('today_date').value = formatted;
+  </script>
+
+    
+
+    <div style="margin-top: 40px;">
+      <h3>📍 가까운 정형외과 찾기</h3>
+      <iframe
+        width="100%"
+        height="300"
+        frameborder="0"
+        style="border:0"
+        src="https://www.google.com/maps?q=가까운 정형외과&output=embed"
+        allowfullscreen>
+      </iframe>
+    </div>
+  {% endif %}
+</div>
+{% endblock explain_contents %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block explain_contents %}
+
+<h1 class="mb-3">✏️ 게시글 수정</h1>
+
+<form method="POST" class="card p-4 shadow-sm">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-warning">수정 완료</button>
+</form>
+
+<a href="{% url 'post_detail' post.id %}" class="btn btn-secondary mt-3">취소</a>
+
+{% endblock explain_contents %}

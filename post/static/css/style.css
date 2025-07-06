@@ -1,0 +1,165 @@
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f8f9fa;
+    margin: 40px auto;
+    max-width: 720px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+form {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e0e0e0;
+}
+
+.table-style {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e0e0e0;
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+.table-style th,
+.table-style td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.form-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    align-items: center;
+}
+
+label {
+    flex: 1;
+    font-weight: 500;
+    color: #444;
+}
+
+.form-field {
+    flex: 2;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+button {
+    margin-top: 25px;
+    background-color: #0056b3;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button:hover {
+    background-color: #003e85;
+}
+
+.result-box {
+    border: 2px solid #dc3545;
+    background-color: #fff3f3;
+    padding: 25px;
+    border-radius: 10px;
+    margin-top: 40px;
+}
+
+.result-box p {
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+.result-box strong {
+    color: #c30000;
+}
+
+@media print {
+    button {
+    display: none;
+    }
+
+    body {
+    background-color: white;
+    font-size: 14pt;
+    }
+}
+@media (max-width: 768px) {
+    body {
+        margin: 20px 10px;
+        max-width: 100%;
+    }
+
+    .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    label {
+        margin-bottom: 6px;
+        width: 100%;
+    }
+
+    .form-field {
+        width: 100%;
+    }
+
+    .radio-group {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    button {
+        width: 100%;
+        font-size: 15px;
+    }
+
+    .table-style {
+        font-size: 14px;
+        overflow-x: auto;
+        display: block;
+    }
+}
+.info-box {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+    border: 1px solid #c7c0c0;
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}

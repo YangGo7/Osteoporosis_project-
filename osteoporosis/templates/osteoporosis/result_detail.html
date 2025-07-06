@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block explain_contents %}
+
+<div class="container mt-4">
+    <h2 class="mb-4">골다공증 예측 결과</h2>
+
+    <div class="card p-3">
+        <h4>환자 정보</h4>
+        <p><strong>이름:</strong> {{ result.name }}</p>
+        <p><strong>예측 날짜:</strong> {{ result.created_at|date:"Y-m-d H:i" }}</p>
+    </div>
+
+    <div class="card mt-3 p-3">
+        <h4>예측 결과</h4>
+        <p><strong>주요 골절 위험도:</strong> {{ result.major_risk }}%</p>
+        <p><strong>고관절 골절 위험도:</strong> {{ result.hip_risk }}%</p>
+        <p><strong>위험 수준:</strong> 
+            <span style="color: {% if result.level == 'High Risk' %}red{% elif result.level == 'Caution' %}orange{% else %}green{% endif %}; font-weight: bold;">
+                {{ result.level }}
+            </span>
+        </p>
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'osteoporosis:pdf_my' %}?name={{ result.name }}&major_risk={{ result.major_risk }}&hip_risk={{ result.hip_risk }}&osteoporosis_risk=0&risk_level={{ result.level }}" class="btn btn-primary" target="_blank">
+            PDF로 저장
+        </a>
+    </div>
+
+    <!-- ✅ 그래프 영역 -->
+    <div class="mt-5">
+        <h4 class="text-center">📊 예측 결과 시각화</h4>
+        <canvas id="barChart" class="my-4"></canvas>
+        <canvas id="doughnutChart" class="my-4"></canvas>
+    </div>
+</div>
+
+<!-- ✅ Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const majorRisk = {{ result.major_risk }};
+    const hipRisk = {{ result.hip_risk }};
+
+    // ✅ 막대 그래프
+    const barCtx = document.getElementById('barChart').getContext('2d');
+    new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Major Fracture', 'Hip Fracture'],
+            datasets: [{
+                label: '위험도 (%)',
+                data: [majorRisk, hipRisk],
+                backgroundColor: ['#4e79a7', '#f28e2b'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true, max: 100 }
+            }
+        }
+    });
+
+
+</script>
+
+{% endblock explain_contents %}

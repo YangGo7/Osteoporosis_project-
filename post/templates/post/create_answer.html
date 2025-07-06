@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block explain_contents %}
+
+<h2 class="mb-3">💬 답변 작성</h2>
+
+<form method="post" class="card p-4 shadow-sm">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label for="{{ form.content.id_for_label }}" class="form-label">답변 내용</label>
+        {{ form.content }}
+    </div>
+
+    <div class="form-check">
+        {{ form.is_secret }}
+        <label for="{{ form.is_secret.id_for_label }}" class="form-check-label ms-2">
+            비밀답변
+        </label>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">답변 달기</button>
+</form>
+
+<a href="{% url 'post_detail' post.id %}" class="btn btn-secondary mt-3">게시글로 돌아가기</a>
+
+{% endblock explain_contents %}

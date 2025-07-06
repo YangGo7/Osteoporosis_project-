@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+{% block explain_contents %}
+<div class="container my-4">
+<h2 class="text-center">예측 결과 기록</h2>
+
+{% if results %}
+    <table class="table table-striped mt-4">
+    <thead>
+        <tr>
+        <th>이름</th>
+        <th>주요 골절 위험 (%)</th>
+        <th>고관절 골절 위험 (%)</th>
+        <th>위험도</th>
+        <th>날짜</th>
+        <th>PDF</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in results %}
+        <tr>
+        <td>{{ r.name }}</td>  
+        <td>{{ r.major_risk }}</td>
+        <td>{{ r.hip_risk }}</td>
+        <td>{{ r.level }}</td>
+        <td>{{ r.created_at|date:"Y-m-d H:i" }}</td>
+        <td>
+          <a href="{% url 'osteoporosis:pdf_my' %}?name={{ r.name }}&major_risk={{ r.major_risk }}&hip_risk={{ r.hip_risk }}&osteoporosis_risk=0&risk_level={{ r.level }}"
+             class="btn btn-success"
+             target="_blank">
+             PDF 저장
+          </a>
+        </td>         
+        </tr>
+        <tr>
+            <td colspan="6">
+                <canvas id="chart-{{ forloop.counter }}" height="80"></canvas>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+{% else %}
+    <p class="text-center mt-4">저장된 결과가 없습니다.</p>
+{% endif %}
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        {% for r in results %}
+        const ctx{{ forloop.counter }} = document.getElementById('chart-{{ forloop.counter }}').getContext('2d');
+        new Chart(ctx{{ forloop.counter }}, {
+            type: 'bar',
+            data: {
+                labels: ['Major Fracture', 'Hip Fracture'],
+                datasets: [{
+                    label: '{{ r.name }} 위험도',
+                    data: [{{ r.major_risk }}, {{ r.hip_risk }}],
+                    backgroundColor: ['rgba(0, 123, 255, 0.6)', 'rgba(220, 53, 69, 0.6)'],
+                    borderColor: ['rgba(0, 123, 255, 1)', 'rgba(220, 53, 69, 1)'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: '% 위험도'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return context.parsed.y + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        {% endfor %}
+    });
+</script>
+{% endblock %}

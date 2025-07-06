@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #222;
+            line-height: 1.6;
+            margin: 60px 40px 40px; /* ← 상단 여백을 60px로 증가 */
+            font-size: 14px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #003366;
+            margin-bottom: 30px;
+            font-size: 24px; /* ← 제목 크기 증가 */
+        }
+
+        .summary-box {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .summary-box p {
+            margin: 8px 0;
+        }
+
+        .summary-box strong {
+            display: inline-block;
+            width: 180px;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #d00000;
+        }
+
+        .section {
+            margin-top: 35px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            color: #003366;
+            font-size: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid #007bff;
+            padding-left: 10px;
+        }
+
+        .interpretation-item {
+            margin: 6px 0;
+        }
+
+        .tips ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin: 8px 0 0;
+        }
+
+        .tips li {
+            margin-bottom: 6px;
+        }
+
+        .footer {
+            font-size: 12px;
+            color: #666;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Your Osteoporosis Risk Report</h1>
+
+    <div class="summary-box">
+        <p><strong>Major Fracture Risk:</strong> <span style="color:#003366;">{{ major_risk }}%</span></p>
+        <p><strong>Hip Fracture Risk:</strong> <span style="color:#003366;">{{ hip_risk }}%</span></p>
+        <p><strong>Osteoporosis Probability:</strong> <span style="color:#003366;">{{ osteoporosis_risk }}%</span></p>
+        <p><strong>Risk Level:</strong> <span class="highlight">{{ risk_level }}</span></p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">How to Interpret Your Risk Level</div>
+        <div class="interpretation-item"><strong style="color:green;">Normal:</strong> Low risk, no immediate concern</div>
+        <div class="interpretation-item"><strong style="color:orange;">Caution:</strong> Moderate risk, regular checkups recommended</div>
+        <div class="interpretation-item"><strong style="color:red;">High Risk:</strong> Elevated risk, seek medical advice</div>
+    </div>
+
+    <div class="section tips">
+        <div class="section-title">Tips for Bone Health & Fracture Prevention</div>
+        <ul>
+            <li>Engage in regular weight-bearing and resistance exercises</li>
+            <li>Maintain sufficient intake of calcium and vitamin D</li>
+            <li>Avoid smoking and limit alcohol consumption</li>
+            <li>Fall-proof your home environment</li>
+            <li>Schedule regular bone density screenings</li>
+        </ul>
+    </div>
+
+    <p class="footer">
+        ■ This report is for personal reference only. For medical advice, please consult a licensed specialist.
+    </p>
+    {% if qr_image_base64 %}
+    <img src="data:image/png;base64,{{ qr_image_base64 }}" width="150" />
+    <p style="text-align: center;">Scan to view on mobile</p>
+{% endif %}
+
+
+
+</body>
+</html>
